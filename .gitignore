@@ -1,0 +1,14 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# User-uploaded content (created at runtime by the API)
+uploads/
+
+# Build artifacts
+/api
+*.exe
+
+# OS
+.DS_Store
