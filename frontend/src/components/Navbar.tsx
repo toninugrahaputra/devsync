@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { LayoutGrid, LogOut } from 'lucide-react'
+import { LayoutGrid, LogOut, ShieldCheck } from 'lucide-react'
 import Avatar from './Avatar'
 import { useAuth } from '../context/AuthContext'
 import { useConfirm } from '../context/ConfirmContext'
@@ -20,6 +20,12 @@ export default function Navbar() {
       </Link>
       {user && (
         <div className="flex items-center gap-3 text-sm">
+          {user.role === 'admin' && (
+            <Link to="/admin/users" className="flex items-center gap-1 text-gray-600 hover:text-gray-900" title="Registered users">
+              <ShieldCheck size={16} className="text-[#D6AE32]" />
+              <span className="hidden sm:inline">Users</span>
+            </Link>
+          )}
           <Link to="/profile" className="flex items-center gap-2 hover:opacity-80">
             <Avatar name={user.name} avatarPath={user.avatar_path} size={24} />
             <span>{user.name}</span>

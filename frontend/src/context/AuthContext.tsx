@@ -22,6 +22,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return raw ? JSON.parse(raw) : null
   })
 
+  // Refresh the stored user once per page load, so changes made server-side
+  // (e.g. being promoted to admin) show up without logging out and back in.
+  useEffect(() => {
+    if (!localStorage.getItem(TOKEN_KEY)) return
+    client
+      .get<User>('/users/me')
+      .then(({ data }) => setUser(data))
+      .catch(() => {
+        // offline or token expired; keep the cached user as before
+      })
+  }, [])
+
   useEffect(() => {
     if (user) {
       localStorage.setItem(USER_KEY, JSON.stringify(user))

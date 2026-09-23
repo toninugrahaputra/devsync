@@ -52,7 +52,7 @@ func (s *authService) Register(name, email, password string) (*model.LoginRespon
 		return nil, err
 	}
 
-	user := &model.User{Name: name, Email: email, Password: string(hashed)}
+	user := &model.User{Name: name, Email: email, Password: string(hashed), AuthProvider: "password"}
 	if err := s.userRepo.Create(user); err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func (s *authService) LoginWithGoogle(ctx context.Context, credential string) (*
 		if err != nil {
 			return nil, err
 		}
-		user = &model.User{Name: name, Email: email, Password: string(hashed)}
+		user = &model.User{Name: name, Email: email, Password: string(hashed), AuthProvider: "google"}
 		if err := s.userRepo.Create(user); err != nil {
 			return nil, err
 		}

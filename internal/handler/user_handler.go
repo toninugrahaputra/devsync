@@ -27,8 +27,23 @@ func NewUserHandler(userRepo repository.UserRepository) *UserHandler {
 	return &UserHandler{userRepo: userRepo}
 }
 
+func (h *UserHandler) Me(c *gin.Context) {
+	user, _ := c.Get("user")
+	c.JSON(http.StatusOK, user)
+}
+
 func (h *UserHandler) Search(c *gin.Context) {
-	users, err := h.userRepo.Search(c.Query("q"))
+	q := strings.TrimSpace(c.Query("q"))
+	user, _ := c.Get("user")
+	current := user.(*model.User)
+
+	var users []model.User
+	var err error
+	if current.Role == "admin" {
+		users, err = h.userRepo.Search(q)
+	} else {
+		users, err = h.userRepo.SearchVisibleTo(current.ID, q)
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

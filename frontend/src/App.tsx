@@ -11,6 +11,7 @@ import WorkspaceMembersPage from './pages/WorkspaceMembersPage'
 import BoardPage from './pages/BoardPage'
 import InvitePage from './pages/InvitePage'
 import ProfilePage from './pages/ProfilePage'
+import AdminUsersPage from './pages/AdminUsersPage'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
                 <Route path="/w/:workspaceId/members" element={<WorkspaceMembersPage />} />
                 <Route path="/b/:boardId" element={<BoardPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/admin/users" element={<AdminUsersPage />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     avatar_path VARCHAR(500) NULL,
+    role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    auth_provider ENUM('password', 'google') NOT NULL DEFAULT 'password',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"devsync/internal/model"
 	"devsync/internal/service"
 	"net/http"
 	"strings"
@@ -32,6 +33,20 @@ func AuthMiddleware(authService service.AuthService) gin.HandlerFunc {
 		}
 
 		c.Set("user", user)
+		c.Next()
+	}
+}
+
+// AdminOnly must run after AuthMiddleware; it rejects anyone whose account
+// isn't an app-wide admin.
+func AdminOnly() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, _ := c.Get("user")
+		if u, ok := user.(*model.User); !ok || u.Role != "admin" {
+			c.JSON(http.StatusForbidden, gin.H{"error": "admin access required"})
+			c.Abort()
+			return
+		}
 		c.Next()
 	}
 }

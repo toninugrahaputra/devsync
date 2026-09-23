@@ -4,7 +4,15 @@ export interface User {
   username: string | null
   email: string
   avatar_path: string | null
+  // Optional because sessions saved before these fields existed won't have
+  // them until AuthContext refreshes the user from /users/me.
+  role?: 'user' | 'admin'
+  auth_provider?: 'password' | 'google'
   created_at: string
+}
+
+export interface AdminUser extends User {
+  workspaces: { id: number; name: string; role: string }[]
 }
 
 export interface Workspace {

@@ -57,6 +57,7 @@ func main() {
 	checklistHandler := handler.NewChecklistHandler(checklistService)
 	commentHandler := handler.NewCommentHandler(commentService)
 	inviteHandler := handler.NewInviteHandler(inviteService)
+	adminHandler := handler.NewAdminHandler(userRepo)
 
 	r := gin.Default()
 
@@ -85,6 +86,7 @@ func main() {
 		protected.Use(middleware.AuthMiddleware(authService))
 		{
 			protected.GET("/users", userHandler.Search)
+			protected.GET("/users/me", userHandler.Me)
 			protected.PUT("/users/me", userHandler.UpdateProfile)
 			protected.POST("/users/me/avatar", userHandler.UploadAvatar)
 
@@ -144,6 +146,12 @@ func main() {
 			protected.DELETE("/comments/:id", commentHandler.Delete)
 
 			protected.POST("/invites/:token/accept", inviteHandler.Accept)
+
+			admin := protected.Group("/admin")
+			admin.Use(middleware.AdminOnly())
+			{
+				admin.GET("/users", adminHandler.ListUsers)
+			}
 		}
 	}
 
