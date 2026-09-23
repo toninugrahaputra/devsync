@@ -10,9 +10,15 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Loads .env into the process environment when present; a real deployment
+	// that sets env vars directly (no .env file on disk) hits the ignored error
+	// path here and keeps working unchanged.
+	_ = godotenv.Load()
+
 	db := database.InitDB()
 	defer db.Close()
 
